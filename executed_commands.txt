@@ -1,0 +1,19 @@
+cd hello/lab7
+cd api
+docker build . -t cresus/cloud-computing-api:v3
+docker push cresus/cloud-computing-api:v3
+docker run -d -p 1337:1337 cresus/cloud-computing-api:v3
+
+or
+npm start
+
+
+1)backend nodejs file
+2)save it time serie influxdb
+3)grafana for the dashboards
+4)anaconda 
+
+
+docker-compose up -d
+
+bash Simulator.sh

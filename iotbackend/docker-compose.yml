@@ -1,0 +1,71 @@
+version: "3.7"
+services:
+  db:
+    build: ./influx/
+    container_name: cloud-computing-influxdb
+    image: cresus/cloud-computing-influxdb
+    restart: always
+    environment:
+      - INFLUXDB_DB=db
+      - INFLUXDB_HOST=db
+    ports:
+      - 8083:8083
+      - 8086:8086
+    volumes:
+      - databasev:/var/lib/influxdb
+  # mysql:
+  #   image: mysql:5.7
+  #   container_name: cloud-computing-mysql
+  #   volumes:
+  #     - mysqlv:/var/lib/mysql
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 'jeanpaul'
+  #     MYSQL_DATABASE: 'ccpiot'
+  #     MYSQL_USER: 'jeanpaul'
+  #     MYSQL_PASSWORD: 'jeanpaul'
+  #   ports:
+  #     - 3306:3306
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   restart: always
+  #   container_name: cloud-computing-phpmyadmin
+  #   links:
+  #    - mysql
+  #   ports:
+  #     - 8080:80
+  #   environment:
+  #     PMA_HOST: mysql
+  #     PMA_PORT: 3306
+  #     PMA_ARBITRARY: 1
+  dashboard:
+    build: ./grafana/
+    container_name: cloud-computing-grafana
+    image: cresus/cloud-computing-grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - dashboardv:/var/lib/grafana
+  api:
+    build: ./api/
+    container_name: cloud-computing-api
+    image: cresus/cloud-computing-api
+    command: npm start
+    volumes:
+      - apiv:/usr/src/app
+    ports:
+      - 1337:1337
+  notebook:
+    build: ./notebook/
+    container_name: cloud-computing-notebook
+    image: cresus/cloud-computing-notebook
+    ports:
+      - 8888:8888
+    volumes:
+      - anacondav:/opt/notebooks
+volumes:
+  databasev:
+  mysqlv:
+  apiv:
+  anacondav:
+  dashboardv:
