@@ -5,39 +5,20 @@ services:
     container_name: cloud-computing-influxdb
     image: cresus/cloud-computing-influxdb
     restart: always
-    environment:
-      - INFLUXDB_DB=db
-      - INFLUXDB_HOST=db
     ports:
       - 8083:8083
       - 8086:8086
     volumes:
       - databasev:/var/lib/influxdb
-  # mysql:
-  #   image: mysql:5.7
-  #   container_name: cloud-computing-mysql
-  #   volumes:
-  #     - mysqlv:/var/lib/mysql
-  #   restart: always
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: 'jeanpaul'
-  #     MYSQL_DATABASE: 'ccpiot'
-  #     MYSQL_USER: 'jeanpaul'
-  #     MYSQL_PASSWORD: 'jeanpaul'
-  #   ports:
-  #     - 3306:3306
-  # phpmyadmin:
-  #   image: phpmyadmin/phpmyadmin
-  #   restart: always
-  #   container_name: cloud-computing-phpmyadmin
-  #   links:
-  #    - mysql
-  #   ports:
-  #     - 8080:80
-  #   environment:
-  #     PMA_HOST: mysql
-  #     PMA_PORT: 3306
-  #     PMA_ARBITRARY: 1
+  influxdb_cli:
+    links:
+      - db
+    image: quay.io/influxdb/influxdb:v2.0.3
+    container_name: cloud-computing-influxcli
+    entrypoint: influx setup --bucket smart_farm -t SSDZ8-RZvXcNrX_Tqo7dfWED0fALu_1LZB2iSLSpsHncLyEmDro4sBgp7l6bMTpcfHxQv87y2Gm_axoLOYC2bg== -o jeanpaultech --username=admin --password=jeanpaul --host=http://db:8086 -f
+    restart: on-failure:10
+    depends_on:
+      - db
   dashboard:
     build: ./grafana/
     container_name: cloud-computing-grafana

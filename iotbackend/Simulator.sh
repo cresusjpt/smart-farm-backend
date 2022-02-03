@@ -34,6 +34,8 @@ done
 #    temp: 24,
 #    soil: 25,
 #    long: 46.12887,
+#    water: 20,
+#    air_quality: 45,
 #    lat: 46.68151
 #   }
 
@@ -47,7 +49,7 @@ while(true); do
     soil=$(( (RANDOM % 15  )  +20  ))
 
     # Send data to API
-    curl -XPOST -H "Content-Type: application/json" -d '{"device_id": 123, "type": "temp", "ts":"'$d'", "temp": '$temp', "soil": '$soil', "long": "46.12887","lat": "46.68151" }' http://$HOST:$PORT/data
+    curl -XPOST -H "Content-Type: application/json" -d '{"device_id": 123,"water": 12,"air_quality": 23, "type": "temp", "ts":"'$d'", "temp": '$temp', "soil": '$soil', "long": "46.12887","lat": "46.68151" }' http://$HOST:$PORT/data
 
     sleep 1
 
